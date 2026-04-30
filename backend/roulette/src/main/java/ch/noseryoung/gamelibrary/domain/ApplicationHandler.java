@@ -1,4 +1,4 @@
-package ch.noseryoung.gamelibrary.roulette;
+package ch.noseryoung.gamelibrary.domain;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

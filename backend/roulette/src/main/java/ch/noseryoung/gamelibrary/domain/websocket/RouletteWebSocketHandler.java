@@ -1,10 +1,10 @@
-package ch.leon.roulette_backend.websocket;
+package ch.noseryoung.gamelibrary.domain.websocket;
 
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.stereotype.Component;
-import ch.leon.roulette_backend.roulette_backend.roulette.RouletteService;
+import ch.noseryoung.gamelibrary.domain.config.roulette.RouletteService;
 
 @Component
 public class RouletteWebSocketHandler extends TextWebSocketHandler {
