@@ -16,6 +16,8 @@ function connectWebSocket(): void {
       return;
     }
 
+    animateWheel(result);
+
     setTimeout(() => {
       handleSpinResult(result);
       gameState.isSpinning = false;
@@ -57,14 +59,15 @@ interface GameState {
 
 const oddNumbers   = new Set([1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]);
 const evenNumbers  = new Set([2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36]);
-const redNumbers   = new Set([1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]);
-const blackNumbers = new Set([2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36]);
+const redNumbers   = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+const blackNumbers = new Set([2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35]);
 const column1      = new Set([1,4,7,10,13,16,19,22,25,28,31,34]);
 const column2      = new Set([2,5,8,11,14,17,20,23,26,29,32,35]);
 const column3      = new Set([3,6,9,12,15,18,21,24,27,30,33,36]);
 
 const INITIAL_BALANCE = 100000;
 const SPIN_DURATION_MS = 4500;
+const ZERO_OFFSET_DEG = 0;
 
 const gameState: GameState = {
   activeBets: new Map(),
@@ -120,7 +123,6 @@ spinButton.addEventListener("click", () => {
   }
   gameState.isSpinning = true;
   ws.send("spin");
-  animateWheel();
 });
 
 tableEL.addEventListener("click", (e) => {
@@ -228,13 +230,37 @@ function getPayoutMultiplier(bet: BetType, result: number): number {
   return 0;
 }
 
-function animateWheel(): void {
+function animateWheel(result: number): void {
   startRolling();
   rollingSound.currentTime = 0;
   rollingSound.play();
-  currentRotation += 2048;
+
+  const targetNum = result;
+  const angleToTarget = getAngleForNumber(targetNum);
+
+  const normalizedCurrent = currentRotation % 360;
+  let delta = (angleToTarget - normalizedCurrent + 360) % 360;
+  if (delta < 0) delta += 360;
+
+  currentRotation += delta + 360 * 5;
+
   wheelImage.style.transition = `transform ${SPIN_DURATION_MS}ms ease-out`;
   wheelImage.style.transform = `rotate(${currentRotation}deg)`;
+}
+
+function getAngleForNumber(num: number): number {
+  const numberOrder = [
+    0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30,
+    8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29,
+    7, 28, 12, 35, 3, 26
+  ];
+
+  const index = numberOrder.indexOf(num);
+  if (index === -1) throw new Error(`Invalid roulette number: ${num}`);
+
+  const slotDeg = 360 / numberOrder.length; 
+
+  return -(index * slotDeg) + ZERO_OFFSET_DEG;
 }
 
 function getNumberColor(num: number): void {
