@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "eslint": "^10.2.1"
+  },
+  "dependencies": {
+    "ts-audio": "^0.8.1"
+  }
+}

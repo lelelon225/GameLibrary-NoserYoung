@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roulette</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="assets/Images/casino-chip.png" type="image/png" />
+</head>
+<body>
+
+  <div class="app">
+    <div class="dashboard">
+      <div class="dashboard-card">
+        <span class="label">Balance:</span>
+        <span id="balance">$1000</span>
+      </div>
+
+      <div class="dashboard-card">
+        <span class="label">Bet:</span>
+        <span id="bet-amount">$0</span>
+      </div>
+
+      <div class="dashboard-card">
+        <span class="label">Win:</span>
+        <span id="win-amount">$0</span>
+      </div>
+    </div>
+
+    <div class="alerts-container">
+      <div class="alert" id="alert">
+        <div class="alert-icon"></div>
+        <div class="alert-text"></div>
+      </div>
+    </div>
+
+    <div class="roulette">
+      <div class="roulette-container">
+        <div class="wheel">
+          <div class="arrow"></div>
+          <img
+            src="https://media.istockphoto.com/id/993478608/vector/casino-roulette-wheel-3d-vector-of-gamble-game.jpg?s=612x612&w=0&k=20&c=hdeUN3sxZNkBW8Hz9lGgNVOvtjSbDmg9QZqBECkhYeo="
+            alt="Roulette wheel"
+          />
+        </div>
+        <div class="won-number" id="won-number">-</div>
+        <button class="btn" id="spin-btn">Spin</button>
+        <select name="bet-select" id="bet-select">
+          <option value="" selected disabled>Select Bet</option>
+          <option value="250">$250</option>
+          <option value="500">$500</option>
+          <option value="1000">$1000</option>
+          <option value="2500">$2500</option>
+          <option value="5000">$5000</option>
+          <option value="10000">$10000</option>
+          <option value="all-in">All In</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="playground" id="roulette">
+      <div class="table">
+        <div class="outside-bets-container">
+          <div class="outside-bets-top">
+            <button class="outside-bet-big" data-bet="1-18">1 to 18</button>
+            <button class="outside-bet-big" data-bet="19-36">19 to 36</button>
+          </div>
+          <div class="outside-bets-bottom">
+            <button class="outside-bet-small" data-bet="even">EVEN</button>
+            <button class="outside-bet-small color-bet" data-bet="red">
+              <div class="color-oval red-oval"></div>
+            </button>
+            <button class="outside-bet-small color-bet" data-bet="black">
+              <div class="color-oval black-oval"></div>
+            </button>
+            <button class="outside-bet-small" data-bet="odd">ODD</button>
+          </div>
+        </div>
+
+        <div class="right-section">
+
+          <svg height="100%" width="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <style>
+                .triangle-outline {
+                  fill: none;
+                  stroke: var(--outline-color);
+                  stroke-width: 2;
+                }
+
+                .zero-text {
+                  fill: white;
+                  font-family: Arial, sans-serif;
+                  font-size: 22px;
+                  font-weight: bold;
+                  text-anchor: middle;
+                  dominant-baseline: middle;
+                }
+              </style>
+            </defs>
+
+            <path
+              class="triangle-outline"
+              d="M142.184 2.78671C146.948 -0.262645 153.052 -0.26265 157.816 2.78671L292.816 89.1871C296.981 91.8523 299.5 96.4558 299.5 101.4V147.691"
+            />
+
+            <path
+              class="triangle-outline"
+              d="M0.5 147.691V101.4C0.5 96.4558 3.01926 91.8523 7.18359 89.1871L142.184 2.78671"
+            />
+
+            <text class="zero-text" x="150" y="75">0</text>
+          </svg>
+
+          <div class="grid">
+            <div class="green-background"><div class="inner-bet number-red" data-bet="1">1</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="2">2</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="3">3</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="4">4</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="5">5</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="6">6</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="7">7</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="8">8</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="9">9</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="10">10</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="11">11</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="12">12</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="13">13</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="14">14</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="15">15</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="16">16</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="17">17</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="18">18</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="19">19</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="20">20</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="21">21</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="22">22</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="23">23</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="24">24</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="25">25</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="26">26</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="27">27</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="28">28</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="29">29</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="30">30</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="31">31</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="32">32</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="33">33</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="34">34</div></div>
+            <div class="green-background"><div class="inner-bet number-red" data-bet="35">35</div></div>
+            <div class="green-background"><div class="inner-bet number-black" data-bet="36">36</div></div>
+          </div>
+
+          <div class="dozen-bets">
+            <button class="dozen-bet" data-bet="column-1">1st 12</button>
+            <button class="dozen-bet" data-bet="column-2">2nd 12</button>
+            <button class="dozen-bet" data-bet="column-3">3rd 12</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./dist/main.js"></script>
+</body>
+</html>

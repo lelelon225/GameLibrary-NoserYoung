@@ -1,0 +1,15 @@
+<svg width="300" height="149" viewBox="0 0 300 149" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .triangle-outline {
+        fill: none;
+        stroke: burlywood;
+        stroke-width: 1;
+      }
+    </style>
+  </defs>
+  <path 
+    class="triangle-outline"
+    d="M142.184 2.78671C146.948 -0.262645 153.052 -0.26265 157.816 2.78671L292.816 89.1871C296.981 91.8523 299.5 96.4558 299.5 101.4V147.691H0.5V101.4C0.5 96.4558 3.01926 91.8523 7.18359 89.1871L142.184 2.78671Z"
+  />
+</svg>
