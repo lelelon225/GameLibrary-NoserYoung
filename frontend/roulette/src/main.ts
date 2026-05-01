@@ -7,7 +7,8 @@ function connectWebSocket(): void {
 
   ws.addEventListener("message", (event: MessageEvent<string>) => {
     const result = parseInt(event.data, 10);
-    console.log("Spin result received:", result);
+
+    console.log("Spin result received:",  result);
 
     if (Number.isNaN(result)) {
       console.error("Invalid spin result:", event.data);
@@ -83,7 +84,7 @@ const balanceEl   = getElement<HTMLSpanElement>("balance");
 const betAmountEl = getElement<HTMLSpanElement>("bet-amount");
 const winAmountEl = getElement<HTMLSpanElement>("win-amount");
 const resultEl    = getElement<HTMLDivElement>("won-number");
-const tableEL     = getElement<HTMLDivElement>("roulette");
+const tabelEl     = getElement<HTMLDivElement>("roulette");
 const wheelImage  = document.querySelector<HTMLImageElement>(".wheel img")!;
 
 const backgroundMusic = new Audio("./assets/sounds/background-music.mp3");
@@ -125,7 +126,7 @@ spinButton.addEventListener("click", () => {
   ws.send("spin");
 });
 
-tableEL.addEventListener("click", (e) => {
+tabelEl.addEventListener("click", (e) => {
   const target = e.target as HTMLElement;
   if (target.hasAttribute("data-bet")) {
     const betType = target.getAttribute("data-bet") as BetType | null;
@@ -210,6 +211,18 @@ function handleSpinResult(result: number): void {
   updateUI();
 }
 
+function getWinnerBlinkingEffect(result: number): void {
+  const betEl = document.querySelector(`[data-bet="${result}"]`) as HTMLElement | null;
+  if (betEl) {
+    betEl.classList.add("winner");
+    setTimeout(() => {
+      betEl.classList.remove("winner");
+    }, 2000);
+  }
+
+}
+
+
 function getPayoutMultiplier(bet: BetType, result: number): number {
   if (result === 0) return 0;
 
@@ -286,7 +299,7 @@ function stopRolling(): void {
     rollInterval = null;
   }
   spinButton.innerHTML = "Spin";
-  spinButton.disabled = false;
+  spinButton.disabled = false; 
   checkBalance();
   rollingSound.pause();
 }
@@ -326,12 +339,13 @@ function displayResult(result: number): void {
   resultEl.textContent = String(result);
   getNumberColor(result);
   stopRolling();
+  getWinnerBlinkingEffect(result);
 }
 
 function updateUI(): void {
-  balanceEl.textContent   = `$${gameState.balance}`;
-  betAmountEl.textContent = `$${getTotalBetAmount()}`;
-  winAmountEl.textContent = `$${gameState.lastRoundWinnings}`;
+  balanceEl.textContent   = currencyFormatCHF(gameState.balance);
+  betAmountEl.textContent = currencyFormatCHF(getTotalBetAmount());
+  winAmountEl.textContent = currencyFormatCHF(gameState.lastRoundWinnings);
 }
 
 function getTotalBetAmount(): number {
@@ -344,6 +358,10 @@ function getElement<T extends HTMLElement>(id: string): T {
   const el = document.getElementById(id);
   if (!el) throw new Error(`Missing element: #${id}`);
   return el as T;
+}
+
+function currencyFormatCHF(amount: number): string {
+  return new Intl.NumberFormat('de-CH', { style: 'currency', currency: 'CHF' }).format(amount);
 }
 
 initGame();
