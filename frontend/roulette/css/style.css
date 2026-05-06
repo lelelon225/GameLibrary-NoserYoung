@@ -503,17 +503,21 @@ select:focus-visible {
 }
 
 @keyframes blinking {
-  from {
-    transform: scale(1.06);
-    box-shadow: #00da2f 0 0 8px, #00da2f 0 0 16px, #00da2f 0 0 24px;
+  100% {
+    border: 5px dashed var(--gold);
+    box-shadow: 0 0 12px #000000;
   }
-  to {
-    transform: scale(0.95);
+  50% {
+    border: 5px dashed transparent;
+  }
+  0% {
+    border: 5px dashed var(--gold);
+    box-shadow: 0 0 12px #000000;
   }
 } 
 
 .winner {
-  animation: blinking 1s ease-in-out infinite;
+  animation: blinking 0.6s ease-in-out infinite;
 }
 
 .number-red {

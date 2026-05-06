@@ -5,6 +5,7 @@ let ws: WebSocket;
 function connectWebSocket(): void {
   ws = new WebSocket("ws://localhost:8080/ws/roulette");
 
+
   ws.addEventListener("message", (event: MessageEvent<string>) => {
     const result = parseInt(event.data, 10);
 
@@ -29,14 +30,17 @@ function connectWebSocket(): void {
   ws.addEventListener("error", (error) => {
     console.error("WebSocket error:", error);
     gameState.isSpinning = false;
-    stopRolling();
+    gameState.usingFallback = true;
+    apiFallbackSpin();
   });
 
   ws.addEventListener("close", () => {
-    console.warn("WebSocket closed. Reconnecting in 3s...");
-    gameState.isSpinning = false;
+    gameState.usingFallback = true;
     stopRolling();
     setTimeout(connectWebSocket, 3000);
+    if (gameState.usingFallback) {
+      apiFallbackSpin();
+    }
   });
 }
 
@@ -56,6 +60,7 @@ interface GameState {
   currentBet: number;
   lastRoundWinnings: number;
   isSpinning: boolean;
+  usingFallback?: boolean;
 }
 
 const oddNumbers   = new Set([1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]);
@@ -76,6 +81,7 @@ const gameState: GameState = {
   currentBet: 0,
   lastRoundWinnings: 0,
   isSpinning: false,
+  usingFallback: false,
 };
 
 const betSelect   = getElement<HTMLSelectElement>("bet-select");
@@ -213,11 +219,13 @@ function handleSpinResult(result: number): void {
 
 function getWinnerBlinkingEffect(result: number): void {
   const betEl = document.querySelector(`[data-bet="${result}"]`) as HTMLElement | null;
+
+
   if (betEl) {
     betEl.classList.add("winner");
     setTimeout(() => {
       betEl.classList.remove("winner");
-    }, 2000);
+    }, 5000);
   }
 
 }
@@ -305,7 +313,7 @@ function stopRolling(): void {
 }
 
 function checkBalance(): void {
-  if (gameState.balance === 0) {
+  if (gameState.balance === 0 && !gameState.isSpinning) {
     alert.error("You are broke! Waiting on reset", 5000);
     setResetButtonMode(true);
   }
@@ -333,6 +341,17 @@ function setResetButtonMode(enable: boolean): void {
     spinButton.classList.remove("reset-btn");
     spinButton.id = "spin-btn";
   }
+}
+
+function apiFallbackSpin(): void {
+  const fallbackResult = Math.floor(Math.random() * 37);
+  console.warn("Using fallback spin result:", fallbackResult);
+  animateWheel(fallbackResult);
+  setTimeout(() => {
+    handleSpinResult(fallbackResult);
+    gameState.isSpinning = false;
+    displayResult(fallbackResult);
+  }, SPIN_DURATION_MS);
 }
 
 function displayResult(result: number): void {
