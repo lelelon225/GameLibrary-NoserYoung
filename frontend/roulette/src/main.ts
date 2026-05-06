@@ -61,6 +61,7 @@ interface GameState {
   lastRoundWinnings: number;
   isSpinning: boolean;
   usingFallback?: boolean;
+  needsOverflowFix?: boolean;
 }
 
 const oddNumbers   = new Set([1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]);
@@ -82,6 +83,7 @@ const gameState: GameState = {
   lastRoundWinnings: 0,
   isSpinning: false,
   usingFallback: false,
+  needsOverflowFix: false,
 };
 
 const betSelect   = getElement<HTMLSelectElement>("bet-select");
@@ -92,6 +94,7 @@ const winAmountEl = getElement<HTMLSpanElement>("win-amount");
 const resultEl    = getElement<HTMLDivElement>("won-number");
 const tabelEl     = getElement<HTMLDivElement>("roulette");
 const wheelImage  = document.querySelector<HTMLImageElement>(".wheel img")!;
+const dashboardCardEl   = document.querySelectorAll<HTMLDivElement>(".dashboard-card");
 
 const backgroundMusic = new Audio("./assets/sounds/background-music.mp3");
 const winSound        = new Audio("./assets/sounds/coin-sound.mp3");
@@ -118,6 +121,21 @@ betSelect.addEventListener("change", () => {
   }
   calculateBetAmount();
 });
+
+function manageOverflow(): void {
+  if (window.innerWidth < 1800) {
+    gameState.needsOverflowFix = true;
+    dashboardCardEl.forEach((el) => {
+      el.style.overflow = "visible";
+    });
+  } else {
+    dashboardCardEl.forEach((el) => {
+      el.style.overflow = "hidden";
+    });
+    gameState.needsOverflowFix = false;
+  }
+}
+
 
 spinButton.addEventListener("click", () => {
   if (gameState.activeBets.size === 0 || gameState.isSpinning) {
@@ -150,11 +168,14 @@ tabelEl.addEventListener("click", (e) => {
 });
 
 function initGame(): void {
+  //manageOverflow();
   gameState.activeBets.clear();
   gameState.balance = INITIAL_BALANCE;
   gameState.currentBet = 0;
   gameState.lastRoundWinnings = 0;
   gameState.isSpinning = false;
+  gameState.usingFallback = false;
+  gameState.needsOverflowFix = false;
   betSelect.value = "";
   resultEl.textContent = "-";
   resultEl.style.background = "transparent";
